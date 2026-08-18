@@ -17,7 +17,7 @@ def get_version():
 # Using ~= (compatible release) allows patch updates while avoiding broad major-version drift.
 requirements = [
     # Core
-    "requests~=2.34.2",
+    "requests>=2.28.0",
     "colorama~=0.4.6",
 ]
 

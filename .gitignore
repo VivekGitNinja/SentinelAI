@@ -21,3 +21,4 @@ wheels/
 # Local tool/session data
 .nova-tracer/
 .novahunting/
+venv/
