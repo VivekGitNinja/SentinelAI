@@ -1,0 +1,9 @@
+VIVEK KUMAR VERMA <vivek@ItsVivekmac.local> Claude <noreply@anthropic.com>
+VIVEK KUMAR VERMA <vivek@ItsVivekmac.local> Jonathan Reiter <jonathanmreiter@gmail.com>
+VIVEK KUMAR VERMA <vivek@ItsVivekmac.local> Marco Pedrinazzi <marcopedrinazzi.mp@gmail.com>
+VIVEK KUMAR VERMA <vivek@ItsVivekmac.local> Thomas Roccia <thomas.roccia@gmail.com>
+VIVEK KUMAR VERMA <vivek@ItsVivekmac.local> fr0gger <thomas.roccia@gmail.com>
+VIVEK KUMAR VERMA <vivek@ItsVivekmac.local> robomotic <paolo@robomotic.com>
+VIVEK KUMAR VERMA <vivek@ItsVivekmac.local> tas_kmanager <mt.infosec@gmail.com>
+VIVEK KUMAR VERMA <vivek@ItsVivekmac.local> virqdroid <nikchrisaid@gmail.com>
+VIVEK KUMAR VERMA <vivek@ItsVivekmac.local> dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>

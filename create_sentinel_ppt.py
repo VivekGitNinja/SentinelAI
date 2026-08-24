@@ -306,7 +306,7 @@ def create_presentation():
         ("Rule Engine", "Uses a readable, YARA-inspired rule syntax for defining threat patterns.", ACCENT_PURPLE),
         ("Evaluators", "Keyword/Regex, Semantic Similarity, LLM Evaluation", ACCENT_GREEN),
         ("Python SDK", "Allows developers to embed prompt protection directly into their AI applications.", ACCENT_ORANGE),
-        ("CLI", "Security teams can scan individual prompts or entire files using novarun.", ACCENT_CYAN),
+        ("CLI", "Security teams can scan individual prompts or entire files using sentinelai.un.", ACCENT_CYAN),
         ("Rules Repository", "Threat detection logic maintained separately, allowing rules to evolve independently.", ACCENT_RED)
     ]
     
@@ -568,7 +568,7 @@ def create_presentation():
         ("Semantic", ["Semantic Similarity", "Meaning-level pattern detection"], ACCENT_GREEN),
         ("LLM", ["LLM Evaluation", "Context-aware threat analysis"], ACCENT_ORANGE),
         ("AI Providers", ["OpenAI • Anthropic • Azure • Groq • OpenRouter • Ollama", ""], ACCENT_CYAN),
-        ("Interface", ["CLI (novarun) + Python SDK", "Two integration modes"], ACCENT_RED)
+        ("Interface", ["CLI (sentinelai.un) + Python SDK", "Two integration modes"], ACCENT_RED)
     ]
     
     for i, (title, (name, desc), color) in enumerate(techs):
@@ -632,7 +632,7 @@ def create_presentation():
     alignments = [
         ("🔐", "Cybersecurity", "Directly addresses emerging security threats in Generative AI."),
         ("🤖", "Artificial Intelligence", "Combines semantic analysis and LLM-powered evaluation."),
-        ("🧠", "Innovation", "Applies security-rule hunting to natural-language AI threats."),
+        ("🧠", "Insentinelai.ion", "Applies security-rule hunting to natural-language AI threats."),
         ("⚙️", "Technical Implementation", "Modular engine + detection evaluators + programmable rules + SDK + CLI."),
         ("🌍", "Real-World Impact", "Can protect enterprise AI assistants, customer-support bots, AI agents, RAG systems."),
         ("♻️", "Extensibility", "Security teams can create and maintain their own detection rules.")
@@ -705,7 +705,7 @@ def create_presentation():
     tf = cli_code.text_frame
     tf.word_wrap = True
     p = tf.paragraphs[0]
-    p.text = "novarun --rule nova-rules/jailbreak.nov --prompt \"ignore previous instructions\""
+    p.text = "sentinelai.un --rule sentinelai.rules/jailbreak.nov --prompt \"ignore previous instructions\""
     p.font.size = Pt(12)
     p.font.color.rgb = ACCENT_GREEN
     
@@ -724,7 +724,7 @@ def create_presentation():
     tf = sdk_code.text_frame
     tf.word_wrap = True
     p = tf.paragraphs[0]
-    p.text = "from nova import Nova\nnova = Nova()\n@nova.protect(action=\"block\")\ndef chat(prompt):\n    return call_your_llm(prompt)"
+    p.text = "from sentinelai import Sentinel\nsentinelai = Sentinel()\n@sentinelai.protect(action=\"block\")\ndef chat(prompt):\n    return call_your_llm(prompt)"
     p.font.size = Pt(11)
     p.font.color.rgb = ACCENT_GREEN
     
@@ -907,9 +907,9 @@ def create_presentation():
     p.alignment = PP_ALIGN.CENTER
     
     # Save
-    prs.save('/tmp/nova-framework/SentinelAI_Prasunethon2.pptx')
+    prs.save('/tmp/sentinelai.framework/SentinelAI_Prasunethon2.pptx')
     print("✅ SentinelAI presentation saved!")
-    print("📁 /tmp/nova-framework/SentinelAI_Prasunethon2.pptx")
+    print("📁 /tmp/sentinelai.framework/SentinelAI_Prasunethon2.pptx")
 
 if __name__ == '__main__':
     create_presentation()

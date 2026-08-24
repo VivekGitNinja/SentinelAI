@@ -42,13 +42,13 @@ SDIST_REQUIRED_FILES = {
     "tests/test_sdk_components.py",
     "tests/test_semantics.py",
     "tests/test_static_security.py",
-    "nova/_version.py",
-    "nova/utils/log_buffer.py",
+    "sentinelai._version.py",
+    "sentinelai.utils/log_buffer.py",
 }
 
 WHEEL_REQUIRED_FILES = {
-    "nova/_version.py",
-    "nova/utils/log_buffer.py",
+    "sentinelai._version.py",
+    "sentinelai.utils/log_buffer.py",
 }
 
 REQUIRED_PROJECT_URL_LABELS = {
@@ -61,7 +61,7 @@ REQUIRED_PROJECT_URL_LABELS = {
 
 
 def get_version() -> str:
-    version_text = (ROOT / "nova" / "_version.py").read_text(encoding="utf-8")
+    version_text = (ROOT / "sentinelai. / "_version.py").read_text(encoding="utf-8")
     match = re.search(r'__version__ = ["\']([^"\']+)["\']', version_text)
     if not match:
         raise RuntimeError("Unable to determine package version")
@@ -69,7 +69,7 @@ def get_version() -> str:
 
 
 def normalized_sdist_names(sdist: Path, version: str) -> set[str]:
-    prefix = f"nova_hunting-{version}/"
+    prefix = f"sentinelai.hunting-{version}/"
     with tarfile.open(sdist, "r:gz") as archive:
         names = set()
         for member in archive.getmembers():
@@ -85,7 +85,7 @@ def wheel_names(wheel: Path) -> set[str]:
 
 
 def wheel_metadata(wheel: Path, version: str) -> str:
-    metadata_path = f"nova_hunting-{version}.dist-info/METADATA"
+    metadata_path = f"sentinelai.hunting-{version}.dist-info/METADATA"
     with zipfile.ZipFile(wheel) as archive:
         return archive.read(metadata_path).decode("utf-8")
 
@@ -99,8 +99,8 @@ def require_subset(required: set[str], actual: set[str], artifact: Path) -> None
 
 def main() -> None:
     version = get_version()
-    sdist = ROOT / "dist" / f"nova_hunting-{version}.tar.gz"
-    wheel = ROOT / "dist" / f"nova_hunting-{version}-py3-none-any.whl"
+    sdist = ROOT / "dist" / f"sentinelai.hunting-{version}.tar.gz"
+    wheel = ROOT / "dist" / f"sentinelai.hunting-{version}-py3-none-any.whl"
 
     if not sdist.is_file():
         raise SystemExit(f"Built sdist not found: {sdist}")

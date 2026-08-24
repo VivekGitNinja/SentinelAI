@@ -7,7 +7,7 @@ ROOT = Path(__file__).parent
 
 
 def get_version():
-    version_file = ROOT / "nova" / "_version.py"
+    version_file = ROOT / "sentinelai. / "_version.py"
     match = re.search(r'__version__ = ["\']([^"\']+)["\']', version_file.read_text(encoding="utf-8"))
     if not match:
         raise RuntimeError("Unable to determine package version")
@@ -53,22 +53,22 @@ release_requirements = [
 ]
 
 setup(
-    name='nova-hunting',
+    name='sentinelai.hunting',
     version=get_version(),
     author='Thomas Roccia',
     author_email='contact@securitybreak.io',
     description='Prompt Pattern Matching Framework for Generative AI',
     long_description=(ROOT / 'README.md').read_text(encoding='utf-8'),
     long_description_content_type='text/markdown',
-    url='https://github.com/Nova-Hunting/nova-framework',
+    url='https://github.com/VivekGitNinja/SentinelAI',
     project_urls={
-        "Source": "https://github.com/Nova-Hunting/nova-framework",
-        "Issues": "https://github.com/Nova-Hunting/nova-framework/issues",
-        "Security": "https://github.com/Nova-Hunting/nova-framework/security",
-        "Changelog": "https://github.com/Nova-Hunting/nova-framework/blob/main/CHANGELOG.md",
-        "Production Readiness": "https://github.com/Nova-Hunting/nova-framework/blob/main/PRODUCTION_READINESS.md",
+        "Source": "https://github.com/VivekGitNinja/SentinelAI",
+        "Issues": "https://github.com/VivekGitNinja/SentinelAI/issues",
+        "Security": "https://github.com/VivekGitNinja/SentinelAI/security",
+        "Changelog": "https://github.com/VivekGitNinja/SentinelAI/blob/main/CHANGELOG.md",
+        "Production Readiness": "https://github.com/VivekGitNinja/SentinelAI/blob/main/PRODUCTION_READINESS.md",
     },
-    packages=find_packages(exclude=["tests*", "nova_doc*", "*.pyc"]),
+    packages=find_packages(exclude=["tests*", "sentinelai.doc*", "*.pyc"]),
     install_requires=requirements,
     extras_require={
         "test": test_requirements,
@@ -83,7 +83,7 @@ setup(
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            'novarun=nova.novarun:main',
+            'sentinelrun=sentinelai.sentinelrun:main',
         ],
     },
     classifiers=[

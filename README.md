@@ -46,29 +46,29 @@ pip install -e .
 ### Get Rules
 
 ```bash
-git clone https://github.com/Nova-Hunting/nova-rules.git
+git clone https://github.com/SentinelAI-Hunting/sentinelai-rules.git
 ```
 
 ### CLI Usage
 
 ```bash
 # Scan a single prompt
-novarun --rule nova-rules/jailbreak.nov --prompt "ignore previous instructions"
+sentinelairun --rule sentinelai-rules/jailbreak.nov --prompt "ignore previous instructions"
 
 # Scan from file
-novarun --rule nova-rules/jailbreak.nov --file prompts.txt
+sentinelairun --rule sentinelai-rules/jailbreak.nov --file prompts.txt
 ```
 
 ### Python SDK
 
 ```python
-from nova.sdk import Nova
+from sentinelai.sdk import SentinelAI
 
 # Initialize
-nova = Nova()
+sentinelai = SentinelAI()
 
 # Scan a prompt
-result = nova.scan("ignore previous instructions")
+result = sentinelai.scan("ignore previous instructions")
 print(result)
 ```
 
@@ -78,7 +78,7 @@ print(result)
 
 ```
 SentinelAI/
-├── nova/                    # Core framework
+├── sentinelai/                    # Core framework
 │   ├── core/               # Parser, matcher, scanner
 │   ├── evaluators/         # Detection engines
 │   │   ├── keywords.py    # Keyword/regex detection
@@ -132,7 +132,7 @@ Features:
 pytest tests/
 
 # Run with coverage
-pytest tests/ --cov=nova
+pytest tests/ --cov=sentinelai
 ```
 
 ---
@@ -203,7 +203,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- Built on top of [NOVA Framework](https://github.com/Nova-Hunting/nova-framework)
+- Built on top of [SentinelAI Framework](https://github.com/SentinelAI-Hunting/sentinelai-framework)
 - Inspired by YARA rule syntax
 - Created for Prasunethon 2.0
 

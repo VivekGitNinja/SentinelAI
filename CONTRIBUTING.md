@@ -1,12 +1,12 @@
-# Contributing to NOVA
+# Contributing to SentinelAI
 
-Thanks for helping improve NOVA. This project is a production security-adjacent engine, so changes should be easy to review, covered by focused tests, and careful about compatibility.
+Thanks for helping improve SentinelAI. This project is a production security-adjacent engine, so changes should be easy to review, covered by focused tests, and careful about compatibility.
 
 ## Development Setup
 
 ```bash
-git clone https://github.com/Nova-Hunting/nova-framework
-cd nova-framework
+git clone https://github.com/SentinelAI-Hunting/sentinelai-framework
+cd sentinelai-framework
 python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
@@ -16,8 +16,8 @@ python -m pip install -e ".[dev]"
 Run these before opening a pull request:
 
 ```bash
-python -m ruff check nova tests scripts
-python -m compileall -q nova tests scripts
+python -m ruff check sentinelai tests scripts
+python -m compileall -q sentinelai tests scripts
 python -m pytest -q
 python scripts/audit_dependencies.py
 python scripts/check_secrets.py
@@ -45,9 +45,9 @@ Do not open public issues for vulnerabilities. Follow `SECURITY.md` for private 
 ## Pull Request Checklist
 
 - [ ] Tests cover the changed behavior.
-- [ ] `python -m ruff check nova tests scripts` passes.
+- [ ] `python -m ruff check sentinelai tests scripts` passes.
 - [ ] `python -m pytest -q` passes.
-- [ ] `python -m compileall -q nova tests scripts` passes.
+- [ ] `python -m compileall -q sentinelai tests scripts` passes.
 - [ ] `python scripts/audit_dependencies.py` passes.
 - [ ] `python scripts/check_secrets.py` passes.
 - [ ] `python -m build` succeeds.

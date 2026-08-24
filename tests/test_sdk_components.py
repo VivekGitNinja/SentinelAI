@@ -1,20 +1,20 @@
 """
-Tests for Nova SDK components
+Tests for SentinelAI SDK components
 
 Tests covering the policy system, scan results, and redaction.
 """
 
 import pytest
 
-from nova.sdk import (
+from sentinelai.sdk import (
     ScanResult,
     RuleMatch,
-    NovaPolicy,
+    SentinelPolicy,
     PolicyRule,
     Action,
     Redactor,
 )
-from nova.core.rules import KeywordPattern
+from sentinelai.core.rules import KeywordPattern
 
 
 # =============================================================================
@@ -65,18 +65,18 @@ class TestPolicyRule:
         assert rule.callback == callback
 
 
-class TestNovaPolicy:
-    """Tests for NovaPolicy class."""
+class TestSentinelPolicy:
+    """Tests for SentinelPolicy class."""
 
     def test_empty_policy(self):
         """Test empty policy uses default action."""
-        policy = NovaPolicy()
+        policy = SentinelPolicy()
         result = policy.get_action_for_match("TestRule", {})
         assert result.action == Action.FLAG
 
     def test_exact_match(self):
         """Test exact rule name matching."""
-        policy = NovaPolicy({
+        policy = SentinelPolicy({
             "PromptInjection": {"action": "block"}
         })
         result = policy.get_action_for_match("PromptInjection", {})
@@ -84,7 +84,7 @@ class TestNovaPolicy:
 
     def test_prefix_match(self):
         """Test rule name prefix matching."""
-        policy = NovaPolicy({
+        policy = SentinelPolicy({
             "PI": {"action": "block"}
         })
         result = policy.get_action_for_match("PIJailbreak", {})
@@ -92,7 +92,7 @@ class TestNovaPolicy:
 
     def test_category_wildcard(self):
         """Test category wildcard matching."""
-        policy = NovaPolicy({
+        policy = SentinelPolicy({
             "jailbreak/*": {"action": "flag"}
         })
         result = policy.get_action_for_match("TestRule", {"category": "jailbreak/roleplay"})
@@ -100,7 +100,7 @@ class TestNovaPolicy:
 
     def test_severity_default(self):
         """Test severity-based default action."""
-        policy = NovaPolicy()
+        policy = SentinelPolicy()
         result = policy.get_action_for_match("TestRule", {"severity": "critical"})
         assert result.action == Action.BLOCK
 
@@ -109,7 +109,7 @@ class TestNovaPolicy:
 
     def test_policy_priority(self):
         """Test that exact match takes priority over prefix."""
-        policy = NovaPolicy({
+        policy = SentinelPolicy({
             "PI": {"action": "flag"},
             "PITest": {"action": "block"}
         })
@@ -118,14 +118,14 @@ class TestNovaPolicy:
 
     def test_add_rule(self):
         """Test adding rules dynamically."""
-        policy = NovaPolicy()
+        policy = SentinelPolicy()
         policy.add_rule("Test", {"action": "block"})
         result = policy.get_action_for_match("Test", {})
         assert result.action == Action.BLOCK
 
     def test_policy_normalizes_string_default_and_severity_actions(self):
         """Test string actions behave the same as Action enum values."""
-        policy = NovaPolicy(
+        policy = SentinelPolicy(
             default_action="allow",
             severity_actions={"critical": "block", "medium": "flag"},
         )
@@ -136,7 +136,7 @@ class TestNovaPolicy:
 
     def test_policy_normalizes_policy_rule_and_setters(self):
         """Test PolicyRule and setter actions are normalized consistently."""
-        policy = NovaPolicy({"ExactRule": PolicyRule(action="BLOCK")})
+        policy = SentinelPolicy({"ExactRule": PolicyRule(action="BLOCK")})
         policy.set_default_action("redact")
         policy.set_severity_action("low", "allow")
 
@@ -146,26 +146,26 @@ class TestNovaPolicy:
 
     def test_policy_accepts_string_action_shorthand(self):
         """Test common compact policy syntax maps directly to actions."""
-        policy = NovaPolicy({"PromptInjection": "block"})
+        policy = SentinelPolicy({"PromptInjection": "block"})
 
         assert policy.get_action_for_match("PromptInjection", {}).action == Action.BLOCK
 
     def test_policy_rejects_invalid_shapes_with_clear_errors(self):
         """Test malformed policy config fails with deliberate validation errors."""
         with pytest.raises(ValueError, match="rules must be a mapping"):
-            NovaPolicy(rules=["PromptInjection"])
+            SentinelPolicy(rules=["PromptInjection"])
 
         with pytest.raises(ValueError, match="non-empty string"):
-            NovaPolicy({"": {"action": "block"}})
+            SentinelPolicy({"": {"action": "block"}})
 
         with pytest.raises(ValueError, match="must be a mapping, PolicyRule, string, or Action"):
-            NovaPolicy({"PromptInjection": object()})
+            SentinelPolicy({"PromptInjection": object()})
 
         with pytest.raises(ValueError, match="callback.*callable"):
-            NovaPolicy({"PromptInjection": {"action": "block", "callback": "not-callable"}})
+            SentinelPolicy({"PromptInjection": {"action": "block", "callback": "not-callable"}})
 
         with pytest.raises(ValueError, match="severity_actions must be a mapping"):
-            NovaPolicy(severity_actions=["critical"])
+            SentinelPolicy(severity_actions=["critical"])
 
 
 # =============================================================================

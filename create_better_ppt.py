@@ -607,21 +607,21 @@ def create_presentation():
     tf = contact_box.text_frame
     
     p = tf.paragraphs[0]
-    p.text = "github.com/Nova-Hunting/nova-framework"
+    p.text = "github.com/Nova-Hunting/sentinelai.framework"
     p.font.size = Pt(16)
     p.font.color.rgb = ACCENT_BLUE
     p.alignment = PP_ALIGN.CENTER
     
     p = tf.add_paragraph()
-    p.text = "novahunting.ai"
+    p.text = "sentinelai.unting.ai"
     p.font.size = Pt(16)
     p.font.color.rgb = ACCENT_PURPLE
     p.alignment = PP_ALIGN.CENTER
     
     # Save
-    prs.save('/tmp/nova-framework/NOVA_Prashunethon_Modern.pptx')
+    prs.save('/tmp/sentinelai.framework/NOVA_Prashunethon_Modern.pptx')
     print("✅ Modern presentation saved!")
-    print("📁 /tmp/nova-framework/NOVA_Prashunethon_Modern.pptx")
+    print("📁 /tmp/sentinelai.framework/NOVA_Prashunethon_Modern.pptx")
 
 if __name__ == '__main__':
     create_presentation()

@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-Nova SDK + OpenAI Integration Example
+SentinelAI SDK + OpenAI Integration Example
 
-This script demonstrates how to protect OpenAI API calls using Nova SDK.
+This script demonstrates how to protect OpenAI API calls using SentinelAI SDK.
 It scans prompts for jailbreaks, prompt injections, and other threats
 before sending them to the OpenAI API.
 
 Requirements:
-    pip install openai nova-hunting
+    pip install openai sentinelai.hunting
 
 Prerequisites:
-    # Clone the Nova rules repository first
-    git clone https://github.com/Nova-Hunting/nova-rules
+    # Clone the SentinelAI rules repository first
+    git clone https://github.com/Nova-Hunting/sentinelai.rules
 
 Usage:
     export OPENAI_API_KEY="your-api-key"
@@ -20,15 +20,15 @@ Usage:
 
 import os
 from openai import OpenAI
-from nova.sdk import Nova, Action, NovaBlockedError
+from sentinelai.sdk import Sentinel, Action, SentinelBlockedError
 
 
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# Initialize Nova with security policies
-nova = Nova(
-    rules_path="nova-rules/",
+# Initialize Sentinel with security policies
+sentinelai.= Sentinel(
+    rules_path="sentinelai.rules/",
     policy={
         # Block prompt injections and jailbreaks
         "PromptInjection": {"action": "block"},
@@ -47,7 +47,7 @@ nova = Nova(
 
 def chat(user_message: str) -> str:
     """
-    Send a message to OpenAI with Nova protection.
+    Send a message to OpenAI with SentinelAI protection.
 
     Args:
         user_message: The user's input message
@@ -56,14 +56,14 @@ def chat(user_message: str) -> str:
         The assistant's response
 
     Raises:
-        NovaBlockedError: If the message is blocked by security policy
+        SentinelBlockedError: If the message is blocked by security policy
     """
     # Scan the user message
-    scan_result = nova.scan(user_message)
+    scan_result = sentinelai.scan(user_message)
 
     # Check if blocked
     if scan_result.blocked:
-        raise NovaBlockedError(
+        raise SentinelBlockedError(
             scan_result,
             f"Message blocked due to: {', '.join(scan_result.blocked_rules)}"
         )
@@ -88,7 +88,7 @@ def chat(user_message: str) -> str:
 
 
 # Alternative: Using the decorator pattern
-@nova.protect(action="block", raise_on_block=True)
+@sentinelai.protect(action="block", raise_on_block=True)
 def chat_protected(prompt: str) -> str:
     """Protected chat function using decorator."""
     response = client.chat.completions.create(
@@ -102,10 +102,10 @@ def chat_protected(prompt: str) -> str:
 
 
 def main():
-    """Main function demonstrating Nova + OpenAI integration."""
+    """Main function demonstrating SentinelAI + OpenAI integration."""
 
     print("=" * 60)
-    print("Nova SDK + OpenAI Example")
+    print("SentinelAI SDK + OpenAI Example")
     print("=" * 60)
 
     # Test cases
@@ -130,7 +130,7 @@ def main():
         try:
             response = chat(prompt)
             print(f"[OK] Response: {response[:100]}...")
-        except NovaBlockedError as e:
+        except SentinelBlockedError as e:
             print(f"[BLOCKED] {e.message}")
             print(f"         Severity: {e.result.highest_severity}")
         except Exception as e:

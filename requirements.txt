@@ -1,5 +1,5 @@
-# NOVA Framework Requirements
-# Install with: pip install nova-hunting
+# SentinelAI Framework Requirements
+# Install with: pip install sentinel-ai
 
 # Core
 requests~=2.34.2

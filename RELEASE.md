@@ -6,12 +6,12 @@ Releases should favor correctness, clear changelogs, and reproducible artifacts 
 
 1. Confirm the working tree only contains intended release changes.
 2. Update `CHANGELOG.md` with user-facing changes, compatibility notes, and migration guidance.
-3. Confirm version metadata in `nova/_version.py`, package metadata, `CHANGELOG.md`, and `RELEASE_NOTES.md`.
+3. Confirm version metadata in `sentinelai/_version.py`, package metadata, `CHANGELOG.md`, and `RELEASE_NOTES.md`.
 4. Run the local gates:
 
 ```bash
-python -m ruff check nova tests scripts
-python -m compileall -q nova tests scripts
+python -m ruff check sentinelai tests scripts
+python -m compileall -q sentinelai tests scripts
 python -m pytest -q
 python scripts/audit_dependencies.py
 python scripts/check_secrets.py
@@ -28,9 +28,9 @@ git diff --check
 python - <<'PY'
 from pathlib import Path
 import re
-requires = Path('nova_hunting.egg-info/requires.txt').read_text()
+requires = Path('sentinelai_hunting.egg-info/requires.txt').read_text()
 runtime = requires.split('\n\n[', 1)[0]
-version = re.search(r'__version__ = "([^"]+)"', Path('nova/_version.py').read_text()).group(1)
+version = re.search(r'__version__ = "([^"]+)"', Path('sentinelai/_version.py').read_text()).group(1)
 assert 'pytest' not in runtime.lower()
 assert 'ruff' not in runtime.lower()
 assert 'pip-audit' not in runtime.lower()
@@ -45,9 +45,9 @@ assert '[lint]' in requires
 assert '[semantic]' in requires
 assert '[security]' in requires
 assert '[release]' in requires
-assert 'Requires-Python: >=3.10' in Path('nova_hunting.egg-info/PKG-INFO').read_text()
-assert 'Project-URL: Security,' in Path('nova_hunting.egg-info/PKG-INFO').read_text()
-assert 'Project-URL: Production Readiness,' in Path('nova_hunting.egg-info/PKG-INFO').read_text()
+assert 'Requires-Python: >=3.10' in Path('sentinelai_hunting.egg-info/PKG-INFO').read_text()
+assert 'Project-URL: Security,' in Path('sentinelai_hunting.egg-info/PKG-INFO').read_text()
+assert 'Project-URL: Production Readiness,' in Path('sentinelai_hunting.egg-info/PKG-INFO').read_text()
 assert f'## [{version}]' in Path('CHANGELOG.md').read_text()
 assert f'v{version}' in Path('RELEASE_NOTES.md').read_text().splitlines()[0]
 print('release-metadata-ok')

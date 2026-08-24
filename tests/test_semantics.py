@@ -1,7 +1,7 @@
 import builtins
 
-from nova.core.rules import SemanticPattern
-from nova.evaluators.semantics import DefaultSemanticEvaluator
+from sentinelai.core.rules import SemanticPattern
+from sentinelai.evaluators.semantics import DefaultSemanticEvaluator
 
 
 def test_semantic_evaluator_fails_closed_when_optional_dependency_missing(monkeypatch):

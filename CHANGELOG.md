@@ -1,4 +1,4 @@
-# NOVA Framework Changelog
+# SentinelAI Framework Changelog
 
 ## [0.3.0] - 2026-07-07
 
@@ -9,16 +9,16 @@
 - Added SDK quick-start and testing sections to `README.md`.
 
 ### Fixed
-- Fixed CLI startup so keyword-only scans and `novarun --help` do not import optional `transformers` or `torch` packages.
+- Fixed CLI startup so keyword-only scans and `sentinelairun --help` do not import optional `transformers` or `torch` packages.
 
 ### Changed
 - Promoted the package development status from Beta to Production/Stable and removed beta disclaimers from the README, documentation, and governance docs.
-- Restructured `nova/evaluators/llm.py` (1,372 lines) into the `nova/evaluators/llm/` package with per-provider modules and shared cache/session infrastructure. All public imports from `nova.evaluators.llm` are unchanged.
-- Moved `NovaRuleFileParser` into `nova/core/rule_file.py`; it remains importable from `nova.core.parser`.
+- Restructured `sentinelai/evaluators/llm.py` (1,372 lines) into the `sentinelai/evaluators/llm/` package with per-provider modules and shared cache/session infrastructure. All public imports from `sentinelai.evaluators.llm` are unchanged.
+- Moved `SentinelAIRuleFileParser` into `sentinelai/core/rule_file.py`; it remains importable from `sentinelai.core.parser`.
 - Split `tests/test_sdk.py` into `tests/test_sdk.py` (engine, decorator, async, debug) and `tests/test_sdk_components.py` (policy, scan results, redaction).
 
 ### Removed
-- Removed legacy manual test harnesses that predated the pytest suite: `tests/novatest.py`, `tests/novatester.py`, `tests/testerror.py`, `tests/validateerror.py`, and `tests/prompts_testing.txt`.
+- Removed legacy manual test harnesses that predated the pytest suite: `tests/sentinelaitest.py`, `tests/sentinelaitester.py`, `tests/testerror.py`, `tests/validateerror.py`, and `tests/prompts_testing.txt`.
 - Removed the obsolete root `test.py` scratch script (it referenced a nonexistent rules path and private matcher APIs) and dropped it from the lint/compile gates in CI and documentation.
 - Removed the unused `first.gif` asset.
 
@@ -27,9 +27,9 @@
 ### Added
 - Added `OpenRouterEvaluator` for OpenRouter's OpenAI-compatible chat completions API.
 - Added `llm_type="openrouter"` and `--llm openrouter` support.
-- Added `NovaScanner` LLM provider selection and injected evaluator reuse.
+- Added `SentinelAIScanner` LLM provider selection and injected evaluator reuse.
 - Added `OPENROUTER_API_KEY`, `OPENROUTER_LLM_MODEL`, and `OPENROUTER_MODEL` environment variable support.
-- Added CLI smoke tests for `novarun` help output, OpenRouter argument support, and keyword-only scans.
+- Added CLI smoke tests for `sentinelairun` help output, OpenRouter argument support, and keyword-only scans.
 - Added regression tests for quantified condition wildcards, condition-change helper behavior, matcher short-circuiting, and package metadata.
 - Added GitHub Actions CI for Python 3.10-3.13, pytest, Ruff correctness checks, bytecode compilation, and package builds.
 - Added Twine package metadata validation for release builds.
@@ -48,17 +48,17 @@
 - Fixed rules that require unavailable semantic or LLM evaluation to fail closed when that stage could affect the outcome.
 - Fixed LLM response cache keys to include provider context and temperature.
 - Fixed regex case sensitivity: `/pattern/` is case-sensitive and `/pattern/i` is case-insensitive.
-- Restored `nova.utils.log_buffer` with ring-buffer log streaming helpers.
+- Restored `sentinelai.utils.log_buffer` with ring-buffer log streaming helpers.
 - Restored logger format presets, JSON formatting, and `set_log_format()`.
 - Restored provider-specific LLM model environment overrides such as `OPENAI_LLM_MODEL` and `ANTHROPIC_LLM_MODEL`.
 - Fixed `.gitignore` so `tests/` is no longer ignored.
 - Fixed README and installation quick-start CLI flags.
 - Fixed README license link.
-- Fixed public `nova.__version__` to match package metadata from a single source of truth.
+- Fixed public `sentinelai.__version__` to match package metadata from a single source of truth.
 - Fixed advertised Python support to require Python 3.10+, matching the audited runtime dependency floor.
 - Fixed SDK rule loading to fail closed on missing, malformed, or duplicate rule files unless `ignore_invalid_rules=True`.
 - Fixed SDK directory loading to discover nested `.nov` files.
-- Fixed `NovaScanner` duplicate rule handling so constructor and batch additions cannot overwrite or partially mutate scanner state.
+- Fixed `SentinelAIScanner` duplicate rule handling so constructor and batch additions cannot overwrite or partially mutate scanner state.
 - Fixed SDK fast-path LLM scans so they no longer mutate shared matcher evaluator state during concurrent scans.
 - Fixed SDK dynamic LLM rule additions to use the configured provider/model instead of falling back to matcher defaults.
 - Fixed SDK scans to apply Unicode normalization before matching, closing a homoglyph and zero-width keyword evasion gap.
@@ -85,13 +85,13 @@
 - Fixed SDK policy action normalization so string defaults, severity actions, setters, and `PolicyRule` objects behave like `Action` enum values.
 - Fixed SDK policy config validation so malformed policy shapes fail with clear errors, and added string action shorthand such as `{"RuleName": "block"}`.
 - Fixed configuration loading so `GROQ_API_KEY` is captured consistently with other supported LLM provider credentials.
-- Fixed `novarun --config` so provider, model, credentials, Azure endpoints, and Ollama hosts are applied while preserving CLI and environment precedence.
+- Fixed `sentinelairun --config` so provider, model, credentials, Azure endpoints, and Ollama hosts are applied while preserving CLI and environment precedence.
 - Fixed explicit config loading so missing or malformed `--config` files fail fast instead of silently falling back to defaults.
-- Fixed `NovaConfig.save()` so write failures raise an exception instead of being hidden behind a printed message.
+- Fixed `SentinelAIConfig.save()` so write failures raise an exception instead of being hidden behind a printed message.
 
 ### Changed
 - Moved test, lint, documentation, security-audit, semantic-model, provider-SDK example, and release tooling out of default runtime dependencies.
-- Removed unused `pyyaml`, `openai`, and `anthropic` packages from the standard install footprint; provider evaluation uses Nova's HTTP evaluators.
+- Removed unused `pyyaml`, `openai`, and `anthropic` packages from the standard install footprint; provider evaluation uses SentinelAI's HTTP evaluators.
 - Updated default `requests` and optional semantic stack dependency pins to versions that pass a clean `pip-audit` check.
 - Removed Python 3.8 and 3.9 from the CI matrix because audited runtime dependencies no longer support them.
 - Removed the deprecated license classifier while keeping MIT license metadata.
@@ -100,7 +100,7 @@
 
 ### Notes
 - Live provider checks should use temporary API keys and should never commit secrets.
-- NOVA remains beta software; review `SECURITY.md` and `RELEASE.md` before publishing production releases.
+- SentinelAI remains beta software; review `SECURITY.md` and `RELEASE.md` before publishing production releases.
 
 ## [0.1.4] - 2025-04-13
 
@@ -111,7 +111,7 @@
 ## [0.1.2] - 2024-12-18
 
 ### Added
-- Renamed the package to `nova-hunting`.
+- Renamed the package to `sentinelai-hunting`.
 - Added LLM evaluator sharing across scanner runs.
 - Added lazy initialization of LLM resources.
 - Added Groq Cloud evaluator support.

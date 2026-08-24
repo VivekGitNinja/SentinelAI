@@ -1,13 +1,13 @@
 # Security Policy
 
-NOVA is a production security-adjacent engine. Treat findings that could affect scanner correctness, rule evaluation, package integrity, secret handling, or remote provider interactions as security-sensitive.
+SentinelAI is a production security-adjacent engine. Treat findings that could affect scanner correctness, rule evaluation, package integrity, secret handling, or remote provider interactions as security-sensitive.
 
 ## Supported Versions
 
 Security fixes are handled for:
 
 - the `main` branch
-- the latest published `nova-hunting` package version
+- the latest published `sentinelai-hunting` package version
 
 Older versions may not receive backported fixes.
 

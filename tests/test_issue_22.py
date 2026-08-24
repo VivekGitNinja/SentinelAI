@@ -1,12 +1,12 @@
 import logging
 
-from nova.evaluators.condition import (
+from sentinelai.evaluators.condition import (
     can_llm_change_outcome,
     can_semantics_change_outcome,
     evaluate_condition,
 )
-from nova.evaluators.llm import get_validated_evaluator
-from nova.utils import LOG_FORMATS, get_log_buffer, install_buffer_handler, set_log_format
+from sentinelai.evaluators.llm import get_validated_evaluator
+from sentinelai.utils import LOG_FORMATS, get_log_buffer, install_buffer_handler, set_log_format
 
 
 def test_n_of_section_wildcard_evaluates_before_section_wildcard_replacement():
@@ -54,7 +54,7 @@ def test_condition_change_helpers_handle_negated_later_stage_patterns():
 
 
 def test_log_format_and_buffer_compatibility_exports():
-    logger = logging.getLogger("nova.issue22")
+    logger = logging.getLogger("sentinelai.issue22")
     logger.handlers.clear()
     stream_handler = logging.StreamHandler()
     logger.addHandler(stream_handler)
@@ -72,7 +72,7 @@ def test_log_format_and_buffer_compatibility_exports():
 
     logs = get_log_buffer().get_logs()
     assert logs[-1]["message"] == "buffered warning"
-    assert logs[-1]["logger"] == "nova.issue22"
+    assert logs[-1]["logger"] == "sentinelai.issue22"
 
 
 def test_provider_specific_env_model_override(monkeypatch):

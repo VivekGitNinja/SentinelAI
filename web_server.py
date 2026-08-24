@@ -8,11 +8,11 @@ from flask import Flask, request, jsonify, render_template_string
 import sys
 import os
 
-# Add the nova module to path
+# Add the sentinelai.module to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from nova.core.scanner import NovaScanner
-from nova.core.parser import NovaParser
+from sentinelai.core.scanner import SentinelScanner
+from sentinelai.core.parser import SentinelParser
 
 app = Flask(__name__)
 
@@ -195,9 +195,9 @@ HTML_TEMPLATE = """
 """
 
 # Load NOVA rules
-def load_nova_scanner():
+def load_sentinelai.scanner():
     """Initialize NOVA scanner with rules"""
-    scanner = NovaScanner()
+    scanner = SentinelScanner()
     
     # Add keyword-based rules
     rules = {
@@ -271,7 +271,7 @@ def scan():
     data = request.get_json()
     prompt = data.get('prompt', '')
     
-    rules = load_nova_scanner()
+    rules = load_sentinelai.scanner()
     matched_patterns = []
     matched_rules = []
     

@@ -215,7 +215,7 @@ def create_presentation():
         ("Evaluators", "Keywords, Semantics, LLM", Inches(5), Inches(2)),
         ("SDK", "Python API, Decorators, Policy", Inches(9), Inches(2)),
         ("Rules", "YARA-style .nov files", Inches(1), Inches(4)),
-        ("CLI", "novarun command-line tool", Inches(5), Inches(4)),
+        ("CLI", "sentinelai.un command-line tool", Inches(5), Inches(4)),
         ("Web UI", "Flask-based interface", Inches(9), Inches(4))
     ]
     
@@ -511,7 +511,7 @@ def create_presentation():
     # Alignment points
     alignments = [
         ("🏆 Ethical Hacking Track", "Directly addresses cybersecurity threats and AI security"),
-        ("💡 Innovation & Creativity", "Novel approach to prompt injection detection using YARA-style rules"),
+        ("💡 Insentinelai.ion & Creativity", "Novel approach to prompt injection detection using YARA-style rules"),
         ("🔧 Technical Implementation", "Production-ready with full CI/CD, tests, and documentation"),
         ("🎯 Problem-Solving Approach", "Real-world problem with measurable detection capabilities"),
         ("👥 User Impact", "Protects AI systems from malicious attacks and abuse"),
@@ -567,9 +567,9 @@ def create_presentation():
     # Demo info
     demo_info = [
         ("🌐 Web Interface", "http://localhost:5000", "Beautiful web UI for scanning prompts"),
-        ("💻 Command Line", "novarun --rule rules.nov --prompt \"test\"", "CLI tool for batch scanning"),
-        ("🐍 Python SDK", "from nova import Nova", "Integrate into your applications"),
-        ("📦 Installation", "pip install nova-hunting", "One-command installation")
+        ("💻 Command Line", "sentinelai.un --rule rules.nov --prompt \"test\"", "CLI tool for batch scanning"),
+        ("🐍 Python SDK", "from sentinelai import Sentinel", "Integrate into your applications"),
+        ("📦 Installation", "pip install sentinelai.hunting", "One-command installation")
     ]
     
     for i, (title, command, desc) in enumerate(demo_info):
@@ -696,21 +696,21 @@ def create_presentation():
     p.alignment = PP_ALIGN.CENTER
     
     p = tf.add_paragraph()
-    p.text = "GitHub: github.com/Nova-Hunting/nova-framework"
+    p.text = "GitHub: github.com/VivekGitNinja/SentinelAI"
     p.font.size = Pt(16)
     p.font.color.rgb = GRAY
     p.alignment = PP_ALIGN.CENTER
     
     p = tf.add_paragraph()
-    p.text = "Web: novahunting.ai"
+    p.text = "Web: sentinelai.unting.ai"
     p.font.size = Pt(16)
     p.font.color.rgb = GRAY
     p.alignment = PP_ALIGN.CENTER
     
     # Save presentation
-    prs.save('/tmp/nova-framework/NOVA_Prasunethon_2.0_Presentation.pptx')
+    prs.save('/tmp/sentinelai.framework/NOVA_Prasunethon_2.0_Presentation.pptx')
     print("✅ Presentation saved successfully!")
-    print("📁 File: /tmp/nova-framework/NOVA_Prasunethon_2.0_Presentation.pptx")
+    print("📁 File: /tmp/sentinelai.framework/NOVA_Prasunethon_2.0_Presentation.pptx")
 
 if __name__ == '__main__':
     create_presentation()

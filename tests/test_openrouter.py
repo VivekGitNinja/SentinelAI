@@ -2,13 +2,13 @@ import json
 
 import pytest
 
-from nova.evaluators.llm import (
+from sentinelai.evaluators.llm import (
     OpenRouterEvaluator,
     _LLM_CACHE_LOCK,
     _LLM_RESPONSE_CACHE,
     get_validated_evaluator,
 )
-from nova.utils.config import NovaConfig
+from sentinelai.utils.config import SentinelConfig
 
 
 def clear_llm_cache():
@@ -234,7 +234,7 @@ def test_openrouter_cache_is_scoped_by_temperature():
 def test_openrouter_api_key_is_loaded_by_config(monkeypatch):
     monkeypatch.setenv("OPENROUTER_API_KEY", "test-openrouter-key")
 
-    config = NovaConfig()
+    config = SentinelConfig()
     assert config.get("api_keys", "openrouter") == "test-openrouter-key"
 
 
@@ -250,19 +250,19 @@ def test_supported_provider_api_keys_are_loaded_by_config(monkeypatch):
     for env_name, (_, value) in provider_env.items():
         monkeypatch.setenv(env_name, value)
 
-    config = NovaConfig()
+    config = SentinelConfig()
 
     for _, (config_key, value) in provider_env.items():
         assert config.get("api_keys", config_key) == value
 
 
 def test_provider_runtime_endpoints_are_loaded_by_config(monkeypatch):
-    monkeypatch.setenv("AZURE_OPENAI_ENDPOINT", "https://nova-test.openai.azure.com")
+    monkeypatch.setenv("AZURE_OPENAI_ENDPOINT", "https://sentinelai.test.openai.azure.com")
     monkeypatch.setenv("OLLAMA_HOST", "http://127.0.0.1:11434")
 
-    config = NovaConfig()
+    config = SentinelConfig()
 
-    assert config.get("llm", "endpoint") == "https://nova-test.openai.azure.com"
+    assert config.get("llm", "endpoint") == "https://sentinelai.test.openai.azure.com"
     assert config.get("llm", "host") == "http://127.0.0.1:11434"
 
 
@@ -270,28 +270,28 @@ def test_explicit_config_path_must_exist(tmp_path):
     missing_config = tmp_path / "missing.ini"
 
     with pytest.raises(ValueError, match="Config file not found"):
-        NovaConfig(str(missing_config))
+        SentinelConfig(str(missing_config))
 
 
 def test_explicit_json_config_must_be_valid_object(tmp_path):
-    config_file = tmp_path / "nova.json"
+    config_file = tmp_path / "sentinelai.json"
     config_file.write_text("[]", encoding="utf-8")
 
     with pytest.raises(ValueError, match="JSON config root must be an object"):
-        NovaConfig(str(config_file))
+        SentinelConfig(str(config_file))
 
 
 def test_config_save_accepts_basename_path(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
 
-    config = NovaConfig()
+    config = SentinelConfig()
     config.set("llm", "provider", "openrouter")
-    config.save("nova.ini")
+    config.save("sentinelai.ini")
 
-    saved_config = tmp_path / "nova.ini"
+    saved_config = tmp_path / "sentinelai.ini"
     assert saved_config.exists()
 
-    reloaded = NovaConfig(str(saved_config))
+    reloaded = SentinelConfig(str(saved_config))
     assert reloaded.get("llm", "provider") == "openrouter"
 
 
@@ -299,7 +299,7 @@ def test_config_save_failure_raises(tmp_path):
     blocking_file = tmp_path / "not-a-directory"
     blocking_file.write_text("occupied", encoding="utf-8")
 
-    config = NovaConfig()
+    config = SentinelConfig()
 
     with pytest.raises(ValueError, match="Failed to save config"):
-        config.save(str(blocking_file / "nova.ini"))
+        config.save(str(blocking_file / "sentinelai.ini"))

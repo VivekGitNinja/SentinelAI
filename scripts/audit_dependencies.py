@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EGG_REQUIRES = ROOT / "nova_hunting.egg-info" / "requires.txt"
+EGG_REQUIRES = ROOT / "sentinelai.hunting.egg-info" / "requires.txt"
 
 
 def run_command(args: list[str]) -> None:
@@ -46,7 +46,7 @@ def write_requirements_file(name: str, requirements: list[str]) -> Path:
     temp = tempfile.NamedTemporaryFile(
         mode="w",
         encoding="utf-8",
-        prefix=f"nova-{name}-",
+        prefix=f"sentinelai.{name}-",
         suffix=".txt",
         delete=False,
     )

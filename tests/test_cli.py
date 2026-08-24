@@ -58,9 +58,9 @@ rule CliConfigLLMRule
     return rule_file
 
 
-def test_novarun_help_lists_openrouter():
+def test_sentinelai.un_help_lists_openrouter():
     result = subprocess.run(
-        [sys.executable, "-m", "nova.novarun", "--help"],
+        [sys.executable, "-m", "sentinelai.sentinelai.un", "--help"],
         check=False,
         capture_output=True,
         text=True,
@@ -70,7 +70,7 @@ def test_novarun_help_lists_openrouter():
     assert "openrouter" in result.stdout
 
 
-def test_novarun_import_does_not_load_optional_transformers(monkeypatch):
+def test_sentinelai.un_import_does_not_load_optional_transformers(monkeypatch):
     original_import = builtins.__import__
     blocked_imports = []
 
@@ -80,16 +80,16 @@ def test_novarun_import_does_not_load_optional_transformers(monkeypatch):
             raise AssertionError(f"Unexpected optional import at CLI startup: {name}")
         return original_import(name, *args, **kwargs)
 
-    monkeypatch.delitem(sys.modules, "nova.novarun", raising=False)
+    monkeypatch.delitem(sys.modules, "sentinelai.sentinelai.un", raising=False)
     monkeypatch.setattr(builtins, "__import__", guarded_import)
 
-    module = importlib.import_module("nova.novarun")
+    module = importlib.import_module("sentinelai.sentinelai.un")
 
     assert hasattr(module, "main")
     assert blocked_imports == []
 
 
-def test_novarun_keyword_rule_matches_without_llm(tmp_path):
+def test_sentinelai.un_keyword_rule_matches_without_llm(tmp_path):
     rule_file = tmp_path / "keyword_rule.nov"
     rule_file.write_text(
         """
@@ -112,7 +112,7 @@ rule CliKeywordRule
         [
             sys.executable,
             "-m",
-            "nova.novarun",
+            "sentinelai.sentinelai.un",
             "--rule",
             str(rule_file),
             "--prompt",
@@ -127,7 +127,7 @@ rule CliKeywordRule
     assert "MATCHED" in result.stdout
 
 
-def test_novarun_keyword_rule_non_match_returns_one(tmp_path):
+def test_sentinelai.un_keyword_rule_non_match_returns_one(tmp_path):
     rule_file = tmp_path / "keyword_rule.nov"
     rule_file.write_text(
         """
@@ -150,7 +150,7 @@ rule CliKeywordRule
         [
             sys.executable,
             "-m",
-            "nova.novarun",
+            "sentinelai.sentinelai.un",
             "--rule",
             str(rule_file),
             "--llm",
@@ -167,7 +167,7 @@ rule CliKeywordRule
     assert "NOT MATCHED" in result.stdout
 
 
-def test_novarun_single_rule_file_allows_leading_comments(tmp_path):
+def test_sentinelai.un_single_rule_file_allows_leading_comments(tmp_path):
     rule_file = tmp_path / "keyword_rule_with_header.nov"
     rule_file.write_text(
         """
@@ -190,7 +190,7 @@ rule CliHeaderRule
         [
             sys.executable,
             "-m",
-            "nova.novarun",
+            "sentinelai.sentinelai.un",
             "--rule",
             str(rule_file),
             "--prompt",
@@ -205,7 +205,7 @@ rule CliHeaderRule
     assert "CliHeaderRule" in result.stdout
 
 
-def test_novarun_single_rule_file_ignores_rule_words_in_metadata(tmp_path):
+def test_sentinelai.un_single_rule_file_ignores_rule_words_in_metadata(tmp_path):
     rule_file = tmp_path / "keyword_rule_with_rule_word.nov"
     rule_file.write_text(
         """
@@ -228,7 +228,7 @@ rule CliMetadataRuleWord
         [
             sys.executable,
             "-m",
-            "nova.novarun",
+            "sentinelai.sentinelai.un",
             "--rule",
             str(rule_file),
             "--prompt",
@@ -243,7 +243,7 @@ rule CliMetadataRuleWord
     assert "CliMetadataRuleWord" in result.stdout
 
 
-def test_novarun_multi_rule_file_matches_valid_rules(tmp_path):
+def test_sentinelai.un_multi_rule_file_matches_valid_rules(tmp_path):
     rule_file = tmp_path / "multi_keyword_rules.nov"
     rule_file.write_text(
         """
@@ -272,7 +272,7 @@ rule CliSecondRule
         [
             sys.executable,
             "-m",
-            "nova.novarun",
+            "sentinelai.sentinelai.un",
             "--rule",
             str(rule_file),
             "--prompt",
@@ -288,7 +288,7 @@ rule CliSecondRule
     assert "CliSecondRule" in result.stdout
 
 
-def test_novarun_multi_rule_file_fails_closed_on_malformed_rule(tmp_path):
+def test_sentinelai.un_multi_rule_file_fails_closed_on_malformed_rule(tmp_path):
     rule_file = tmp_path / "broken_multi_rules.nov"
     rule_file.write_text(
         """
@@ -317,7 +317,7 @@ rule CliBrokenRule
         [
             sys.executable,
             "-m",
-            "nova.novarun",
+            "sentinelai.sentinelai.un",
             "--rule",
             str(rule_file),
             "--prompt",
@@ -334,7 +334,7 @@ rule CliBrokenRule
     assert "MATCHED" not in result.stdout
 
 
-def test_novarun_multi_rule_file_rejects_duplicate_rule_names(tmp_path):
+def test_sentinelai.un_multi_rule_file_rejects_duplicate_rule_names(tmp_path):
     rule_file = tmp_path / "duplicate_multi_rules.nov"
     rule_file.write_text(
         """
@@ -363,7 +363,7 @@ rule CliDuplicateRule
         [
             sys.executable,
             "-m",
-            "nova.novarun",
+            "sentinelai.sentinelai.un",
             "--rule",
             str(rule_file),
             "--prompt",
@@ -379,9 +379,9 @@ rule CliDuplicateRule
     assert "MATCHED" not in result.stdout
 
 
-def test_novarun_config_supplies_llm_provider_model_and_key(tmp_path):
+def test_sentinelai.un_config_supplies_llm_provider_model_and_key(tmp_path):
     rule_file = _write_llm_rule(tmp_path)
-    config_file = tmp_path / "nova.ini"
+    config_file = tmp_path / "sentinelai.ini"
     config_file.write_text(
         """
 [llm]
@@ -398,7 +398,7 @@ openrouter = test-openrouter-key
         [
             sys.executable,
             "-m",
-            "nova.novarun",
+            "sentinelai.sentinelai.un",
             "--config",
             str(config_file),
             "--rule",
@@ -419,9 +419,9 @@ openrouter = test-openrouter-key
     assert "meta-llama/llama-3.1-8b-instruct" in result.stdout
 
 
-def test_novarun_model_environment_overrides_config_file_model(tmp_path):
+def test_sentinelai.un_model_environment_overrides_config_file_model(tmp_path):
     rule_file = _write_llm_rule(tmp_path)
-    config_file = tmp_path / "nova.ini"
+    config_file = tmp_path / "sentinelai.ini"
     config_file.write_text(
         """
 [llm]
@@ -441,7 +441,7 @@ openrouter = test-openrouter-key
         [
             sys.executable,
             "-m",
-            "nova.novarun",
+            "sentinelai.sentinelai.un",
             "--config",
             str(config_file),
             "--rule",
@@ -462,9 +462,9 @@ openrouter = test-openrouter-key
     assert "meta-llama/llama-3.1-8b-instruct" not in result.stdout
 
 
-def test_novarun_cli_llm_overrides_config_provider(tmp_path):
+def test_sentinelai.un_cli_llm_overrides_config_provider(tmp_path):
     rule_file = _write_llm_rule(tmp_path)
-    config_file = tmp_path / "nova.ini"
+    config_file = tmp_path / "sentinelai.ini"
     config_file.write_text(
         """
 [llm]
@@ -480,7 +480,7 @@ openrouter = test-openrouter-key
         [
             sys.executable,
             "-m",
-            "nova.novarun",
+            "sentinelai.sentinelai.un",
             "--config",
             str(config_file),
             "--llm",
@@ -500,7 +500,7 @@ openrouter = test-openrouter-key
     assert "MATCHED" in result.stdout
 
 
-def test_novarun_missing_explicit_config_fails_clearly(tmp_path):
+def test_sentinelai.un_missing_explicit_config_fails_clearly(tmp_path):
     rule_file = _write_llm_rule(tmp_path)
     missing_config = tmp_path / "missing.ini"
 
@@ -508,7 +508,7 @@ def test_novarun_missing_explicit_config_fails_clearly(tmp_path):
         [
             sys.executable,
             "-m",
-            "nova.novarun",
+            "sentinelai.sentinelai.un",
             "--config",
             str(missing_config),
             "--rule",
@@ -527,16 +527,16 @@ def test_novarun_missing_explicit_config_fails_clearly(tmp_path):
     assert str(missing_config) in result.stdout
 
 
-def test_novarun_malformed_explicit_config_fails_clearly(tmp_path):
+def test_sentinelai.un_malformed_explicit_config_fails_clearly(tmp_path):
     rule_file = _write_llm_rule(tmp_path)
-    config_file = tmp_path / "nova.json"
+    config_file = tmp_path / "sentinelai.json"
     config_file.write_text("{", encoding="utf-8")
 
     result = subprocess.run(
         [
             sys.executable,
             "-m",
-            "nova.novarun",
+            "sentinelai.sentinelai.un",
             "--config",
             str(config_file),
             "--rule",
@@ -555,8 +555,8 @@ def test_novarun_malformed_explicit_config_fails_clearly(tmp_path):
     assert str(config_file) in result.stdout
 
 
-def test_novarun_prints_fail_closed_evaluation_warnings(capsys):
-    from nova.novarun import print_result
+def test_sentinelai.un_prints_fail_closed_evaluation_warnings(capsys):
+    from sentinelai.sentinelai.un import print_result
 
     print_result(
         {

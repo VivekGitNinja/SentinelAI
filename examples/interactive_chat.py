@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Interactive Chat with Nova Protection
+Interactive Chat with SentinelAI Protection
 
-A simple interactive chat using OpenAI, protected by Nova SDK.
+A simple interactive chat using OpenAI, protected by SentinelAI SDK.
 
 Prerequisites:
-    # Clone the Nova rules repository first
-    git clone https://github.com/Nova-Hunting/nova-rules
+    # Clone the SentinelAI rules repository first
+    git clone https://github.com/Nova-Hunting/sentinelai.rules
 
 Usage:
     export OPENAI_API_KEY="your-key"
@@ -14,14 +14,14 @@ Usage:
 """
 
 from openai import OpenAI
-from nova.sdk import Nova, NovaBlockedError
+from sentinelai.sdk import Sentinel, SentinelBlockedError
 
 # Initialize OpenAI
 client = OpenAI()
 
-# Initialize Nova with security policy
-nova = Nova(
-    rules_path="nova-rules/",
+# Initialize Sentinel with security policy
+sentinelai.= Sentinel(
+    rules_path="sentinelai.rules/",
     policy={
         "Jailbreak": {"action": "block"},
         "Injection": {"action": "block"},
@@ -30,7 +30,7 @@ nova = Nova(
 )
 
 # Protect the chat function with decorator
-@nova.protect(action="block")
+@sentinelai.protect(action="block")
 def chat(prompt: str) -> str:
     response = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -43,7 +43,7 @@ def chat(prompt: str) -> str:
 
 
 def main():
-    print("Nova Protected Chat (type 'quit' to exit)")
+    print("SentinelAI Protected Chat (type 'quit' to exit)")
     print("-" * 40)
 
     while True:
@@ -60,7 +60,7 @@ def main():
             response = chat(user_input)
             print(f"\nAssistant: {response}")
 
-        except NovaBlockedError as e:
+        except SentinelBlockedError as e:
             print(f"\n[BLOCKED] {e.message}")
         except KeyboardInterrupt:
             print("\nGoodbye!")

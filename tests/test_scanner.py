@@ -1,12 +1,12 @@
 import pytest
 
-from nova.core.rules import KeywordPattern, LLMPattern, NovaRule
-from nova.core.scanner import NovaScanner
-from nova.evaluators.llm import OpenRouterEvaluator
+from sentinelai.core.rules import KeywordPattern, LLMPattern, SentinelRule
+from sentinelai.core.scanner import SentinelScanner
+from sentinelai.evaluators.llm import OpenRouterEvaluator
 
 
 def make_llm_rule(condition="llm.$judge", name="ScannerLLMRule"):
-    return NovaRule(
+    return SentinelRule(
         name=name,
         keywords={"$safe": KeywordPattern("safe")},
         llms={"$judge": LLMPattern("Detect if the text is unsafe")},
@@ -15,7 +15,7 @@ def make_llm_rule(condition="llm.$judge", name="ScannerLLMRule"):
 
 
 def make_keyword_rule(name):
-    return NovaRule(
+    return SentinelRule(
         name=name,
         keywords={"$safe": KeywordPattern("safe")},
         condition="keywords.$safe",
@@ -27,7 +27,7 @@ def test_scanner_uses_configured_openrouter_evaluator_without_llm_call(monkeypat
     monkeypatch.setenv("OPENROUTER_LLM_MODEL", "anthropic/claude-sonnet-4")
 
     rule = make_llm_rule("keywords.$safe or llm.$judge")
-    scanner = NovaScanner([rule], llm_type="openrouter")
+    scanner = SentinelScanner([rule], llm_type="openrouter")
 
     assert isinstance(scanner._llm_evaluator, OpenRouterEvaluator)
     assert scanner._llm_evaluator.model == "anthropic/claude-sonnet-4"
@@ -56,7 +56,7 @@ def test_scanner_reuses_injected_llm_evaluator():
             }
 
     fake_evaluator = FakeLLMEvaluator()
-    scanner = NovaScanner([make_llm_rule()], llm_evaluator=fake_evaluator)
+    scanner = SentinelScanner([make_llm_rule()], llm_evaluator=fake_evaluator)
 
     results = scanner.scan("suspicious prompt")
 
@@ -71,12 +71,12 @@ def test_scanner_explicit_openrouter_provider_requires_key(monkeypatch):
     monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
 
     with pytest.raises(ValueError, match="OPENROUTER_API_KEY"):
-        NovaScanner([make_llm_rule()], llm_type="openrouter")
+        SentinelScanner([make_llm_rule()], llm_type="openrouter")
 
 
 def test_scanner_constructor_rejects_duplicate_rule_names():
     with pytest.raises(ValueError, match="Duplicate rule name"):
-        NovaScanner([
+        SentinelScanner([
             make_keyword_rule("DuplicateRule"),
             make_keyword_rule("DuplicateRule"),
         ])
@@ -85,7 +85,7 @@ def test_scanner_constructor_rejects_duplicate_rule_names():
 def test_scanner_add_rule_uses_configured_openrouter_evaluator(monkeypatch):
     monkeypatch.setenv("OPENROUTER_API_KEY", "test-openrouter-key")
 
-    scanner = NovaScanner(llm_type="openrouter", llm_model="google/gemini-2.5-pro")
+    scanner = SentinelScanner(llm_type="openrouter", llm_model="google/gemini-2.5-pro")
     scanner.add_rule(make_llm_rule("keywords.$safe or llm.$judge"))
 
     assert isinstance(scanner._llm_evaluator, OpenRouterEvaluator)
@@ -93,7 +93,7 @@ def test_scanner_add_rule_uses_configured_openrouter_evaluator(monkeypatch):
 
 
 def test_scanner_add_rules_rejects_duplicates_without_partial_mutation():
-    scanner = NovaScanner([make_keyword_rule("ExistingRule")])
+    scanner = SentinelScanner([make_keyword_rule("ExistingRule")])
     original_rule_names = scanner.get_rule_names()
 
     with pytest.raises(ValueError, match="Duplicate rule name"):

@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 SOURCE_ROOTS = [
-    Path("nova"),
+    Path("sentinelai.),
     Path("scripts"),
 ]
 

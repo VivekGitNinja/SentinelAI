@@ -1,14 +1,14 @@
 from importlib.metadata import metadata, requires, version
 from pathlib import Path
 
-import nova
+import sentinelai
 import yaml
-from nova._version import __version__
+from sentinelai._version import __version__
 from scripts.audit_dependencies import dedupe, parse_requires
 
 
 def test_public_version_matches_package_metadata():
-    assert nova.__version__ == version("nova-hunting")
+    assert sentinelai.__version__ == version("sentinelai.hunting")
 
 
 def test_release_docs_reference_current_version():
@@ -25,7 +25,7 @@ def test_release_docs_reference_current_version():
 
 
 def test_tooling_dependencies_are_not_runtime_requirements():
-    package_requires = requires("nova-hunting") or []
+    package_requires = requires("sentinelai.hunting") or []
     runtime_requires = [
         requirement for requirement in package_requires
         if "extra ==" not in requirement
@@ -59,12 +59,12 @@ def test_tooling_dependencies_are_not_runtime_requirements():
 
 
 def test_python_requires_matches_supported_dependency_floor():
-    package_metadata = metadata("nova-hunting")
+    package_metadata = metadata("sentinelai.hunting")
     assert package_metadata["Requires-Python"] == ">=3.10"
 
 
 def test_source_headers_do_not_claim_stale_version():
-    source_paths = list(Path("nova").rglob("*.py")) + list(Path("tests").glob("*.py"))
+    source_paths = list(Path("sentinelai.).rglob("*.py")) + list(Path("tests").glob("*.py"))
     stale_header = "Version: " + "1.0.0"
 
     for path in source_paths:
@@ -74,10 +74,10 @@ def test_source_headers_do_not_claim_stale_version():
 def test_public_docs_describe_openrouter_and_current_dev_gates():
     readme = Path("README.md").read_text(encoding="utf-8")
     installation = Path("INSTALLATION.md").read_text(encoding="utf-8")
-    sdk_readme = Path("nova/sdk/README.md").read_text(encoding="utf-8")
+    sdk_readme = Path("sentinelai.sdk/README.md").read_text(encoding="utf-8")
 
     assert "--llm openrouter" in readme
-    assert "--config nova.ini" in readme
+    assert "--config sentinelai.ini" in readme
     assert "[api_keys]" in readme
     assert "missing or malformed" in readme
     assert "PRODUCTION_READINESS.md" in readme
@@ -87,22 +87,22 @@ def test_public_docs_describe_openrouter_and_current_dev_gates():
     assert "GROQ_API_KEY" in installation
     assert "AZURE_OPENAI_ENDPOINT" in installation
     assert "GROQ_MODEL" in installation
-    assert "--config nova.ini" in installation
+    assert "--config sentinelai.ini" in installation
     assert "[api_keys]" in installation
     assert "missing or malformed" in installation
     assert "OLLAMA_HOST" in readme
     assert 'llm_provider="openrouter"' in sdk_readme
     assert "X-OpenRouter-Title" in sdk_readme
-    assert "python -m ruff check nova tests scripts" in installation
-    assert "python -m compileall -q nova tests scripts" in installation
+    assert "python -m ruff check sentinelai.tests scripts" in installation
+    assert "python -m compileall -q sentinelai.tests scripts" in installation
     assert "python scripts/audit_dependencies.py" in installation
     assert "python scripts/check_secrets.py" in installation
     assert "python scripts/verify_artifacts.py" in installation
-    assert 'pip install "nova-hunting[semantic]"' in installation
+    assert 'pip install "sentinelai.hunting[semantic]"' in installation
 
 
 def test_package_metadata_has_trust_and_support_links():
-    package_metadata = metadata("nova-hunting")
+    package_metadata = metadata("sentinelai.hunting")
     project_urls = package_metadata.get_all("Project-URL") or []
 
     for label in [
@@ -153,10 +153,10 @@ def test_wheel_smoke_exercises_installed_package_and_cli():
     smoke = Path("scripts/smoke_wheel.py").read_text(encoding="utf-8")
 
     assert "--no-deps" not in smoke
-    assert "import nova" in smoke
-    assert "NovaMatcher" in smoke
-    assert "NovaParser" in smoke
-    assert '"nova.novarun"' in smoke
+    assert "import sentinelai. in smoke
+    assert "SentinelMatcher" in smoke
+    assert "SentinelParser" in smoke
+    assert '"sentinelai.sentinelai.un"' in smoke
     assert "--help" in smoke
     assert "openrouter" in smoke
     assert "MATCHED" in smoke
@@ -169,7 +169,7 @@ def test_production_readiness_document_covers_operational_risks_and_gates():
         "NOVA is production-ready software",
         "Supported Surfaces",
         "Required Gates",
-        "python -m ruff check nova tests scripts",
+        "python -m ruff check sentinelai.tests scripts",
         "python scripts/audit_dependencies.py",
         "python scripts/check_secrets.py",
         "python scripts/verify_artifacts.py",
@@ -192,8 +192,8 @@ def test_production_readiness_document_covers_operational_risks_and_gates():
 def test_pull_request_template_lists_required_local_gates():
     template = Path(".github/PULL_REQUEST_TEMPLATE.md").read_text(encoding="utf-8")
 
-    assert "python -m ruff check nova tests scripts" in template
-    assert "python -m compileall -q nova tests scripts" in template
+    assert "python -m ruff check sentinelai.tests scripts" in template
+    assert "python -m compileall -q sentinelai.tests scripts" in template
     assert "python -m pytest -q" in template
     assert "python scripts/audit_dependencies.py" in template
     assert "python scripts/check_secrets.py" in template
@@ -228,9 +228,9 @@ def test_ci_workflow_covers_supported_versions_and_release_gates():
         step.get("run", "")
         for step in jobs["test"]["steps"]
     )
-    assert "python -m ruff check nova tests scripts" in test_runs
+    assert "python -m ruff check sentinelai.tests scripts" in test_runs
     assert "python -m pytest -q" in test_runs
-    assert "python -m compileall -q nova tests scripts" in test_runs
+    assert "python -m compileall -q sentinelai.tests scripts" in test_runs
 
     package_runs = "\n".join(
         step.get("run", "")

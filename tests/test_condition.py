@@ -1,6 +1,6 @@
-from nova.core.matcher import NovaMatcher
-from nova.core.parser import NovaParser, NovaParserError, NovaRuleFileParser
-from nova.evaluators.condition import (
+from sentinelai.core.matcher import SentinelMatcher
+from sentinelai.core.parser import SentinelParser, SentinelParserError, SentinelRuleFileParser
+from sentinelai.evaluators.condition import (
     can_llm_change_outcome,
     can_semantics_change_outcome,
     evaluate_condition,
@@ -69,7 +69,7 @@ def test_condition_variables_do_not_replace_name_prefixes():
 
 
 def test_parser_accepts_quantified_prefix_wildcards():
-    rule = NovaParser().parse(
+    rule = SentinelParser().parse(
         """
 rule PrefixWildcardRule
 {
@@ -85,7 +85,7 @@ rule PrefixWildcardRule
 
     assert rule.condition == "all of ($abuse*)"
 
-    rule = NovaParser().parse(
+    rule = SentinelParser().parse(
         """
 rule PrefixWildcardRule
 {
@@ -103,7 +103,7 @@ rule PrefixWildcardRule
 
 
 def test_parser_skips_leading_comments_before_rule_declaration():
-    rule = NovaParser().parse(
+    rule = SentinelParser().parse(
         """
 // Copyright header
 # Rule pack note
@@ -124,7 +124,7 @@ rule HeaderCommentRule
 
 
 def test_parser_skips_hash_comments_inside_rule_sections():
-    rule = NovaParser().parse(
+    rule = SentinelParser().parse(
         """
 rule SectionCommentRule
 {
@@ -160,7 +160,7 @@ rule SectionCommentRule
 
 def test_parser_rejects_unknown_sections():
     try:
-        NovaParser().parse(
+        SentinelParser().parse(
             """
 rule UnknownSectionRule
 {
@@ -172,7 +172,7 @@ rule UnknownSectionRule
 }
 """
         )
-    except NovaParserError as exc:
+    except SentinelParserError as exc:
         assert "Unknown section 'keyword'" in str(exc)
         assert "keywords" in str(exc)
     else:
@@ -180,7 +180,7 @@ rule UnknownSectionRule
 
 
 def test_rule_file_parser_ignores_rule_words_inside_metadata_values():
-    rules = NovaRuleFileParser().parse_content(
+    rules = SentinelRuleFileParser().parse_content(
         """
 rule FirstRule
 {
@@ -211,7 +211,7 @@ rule SecondRule
 
 def test_parser_rejects_unmatched_quantified_prefix_wildcards():
     try:
-        NovaParser().parse(
+        SentinelParser().parse(
             """
 rule PrefixWildcardRule
 {
@@ -223,7 +223,7 @@ rule PrefixWildcardRule
 }
 """
         )
-    except NovaParserError as exc:
+    except SentinelParserError as exc:
         assert "$missing*" in str(exc)
     else:
         raise AssertionError("parser accepted unmatched quantified prefix wildcard")
@@ -231,7 +231,7 @@ rule PrefixWildcardRule
 
 def test_parser_rejects_raw_standalone_wildcard():
     try:
-        NovaParser().parse(
+        SentinelParser().parse(
             """
 rule RawStandaloneWildcardRule
 {
@@ -244,14 +244,14 @@ rule RawStandaloneWildcardRule
 }
 """
         )
-    except NovaParserError as exc:
+    except SentinelParserError as exc:
         assert "Invalid standalone wildcard syntax" in str(exc)
     else:
         raise AssertionError("parser accepted raw standalone wildcard")
 
 
 def test_matcher_does_not_treat_prefix_wildcard_as_shorter_variable():
-    rule = NovaParser().parse(
+    rule = SentinelParser().parse(
         """
 rule PrefixWildcardShortNameRule
 {
@@ -265,7 +265,7 @@ rule PrefixWildcardShortNameRule
 """
     )
 
-    matcher = NovaMatcher(rule)
+    matcher = SentinelMatcher(rule)
     result = matcher.check_prompt("alpha")
 
     assert result["matched"] is False
@@ -308,8 +308,8 @@ rule BadLlmName
 
     for rule_text in bad_rules:
         try:
-            NovaParser().parse(rule_text)
-        except NovaParserError as exc:
+            SentinelParser().parse(rule_text)
+        except SentinelParserError as exc:
             assert "Variable names" in str(exc)
         else:
             raise AssertionError("parser accepted malformed variable name")
@@ -317,7 +317,7 @@ rule BadLlmName
 
 def test_parser_rejects_duplicate_variable_names_across_sections():
     try:
-        NovaParser().parse(
+        SentinelParser().parse(
             """
 rule DuplicateCrossSectionVariableRule
 {
@@ -332,7 +332,7 @@ rule DuplicateCrossSectionVariableRule
 }
 """
         )
-    except NovaParserError as exc:
+    except SentinelParserError as exc:
         assert "Duplicate variable name across sections" in str(exc)
         assert "$risk" in str(exc)
     else:
@@ -340,7 +340,7 @@ rule DuplicateCrossSectionVariableRule
 
 
 def test_matcher_honors_all_of_section_wildcard():
-    rule = NovaParser().parse(
+    rule = SentinelParser().parse(
         """
 rule AllKeywordsRule
 {
@@ -353,13 +353,13 @@ rule AllKeywordsRule
 }
 """
     )
-    matcher = NovaMatcher(rule)
+    matcher = SentinelMatcher(rule)
 
     assert matcher.check_prompt("alpha beta")["matched"] is True
 
 
 def test_matcher_honors_bare_section_quantifiers():
-    parser = NovaParser()
+    parser = SentinelParser()
     rule = parser.parse(
         """
 rule BareKeywordQuantifierRule
@@ -374,7 +374,7 @@ rule BareKeywordQuantifierRule
 """
     )
 
-    matcher = NovaMatcher(rule)
+    matcher = SentinelMatcher(rule)
     matched = matcher.check_prompt("alpha beta")
     non_matched = matcher.check_prompt("alpha")
 
@@ -397,7 +397,7 @@ rule BareAnyKeywordQuantifierRule
 """
     )
 
-    assert NovaMatcher(any_rule).check_prompt("alpha")["matched"] is True
+    assert SentinelMatcher(any_rule).check_prompt("alpha")["matched"] is True
     assert matcher.check_prompt("alpha only")["matched"] is False
 
 
@@ -407,7 +407,7 @@ def test_matcher_evaluates_bare_semantic_quantifiers():
             matched = pattern.pattern in text
             return matched, 1.0 if matched else 0.0
 
-    parser = NovaParser()
+    parser = SentinelParser()
     rule = parser.parse(
         """
 rule BareSemanticQuantifierRule
@@ -422,7 +422,7 @@ rule BareSemanticQuantifierRule
 """
     )
 
-    result = NovaMatcher(rule, semantic_evaluator=FakeSemanticEvaluator()).check_prompt("alpha")
+    result = SentinelMatcher(rule, semantic_evaluator=FakeSemanticEvaluator()).check_prompt("alpha")
 
     assert result["matched"] is True
     assert result["debug"]["all_semantic_matches"] == {"$one": True, "$two": False}
@@ -441,7 +441,7 @@ rule BareAllSemanticQuantifierRule
 """
     )
 
-    all_result = NovaMatcher(all_rule, semantic_evaluator=FakeSemanticEvaluator()).check_prompt("alpha beta")
+    all_result = SentinelMatcher(all_rule, semantic_evaluator=FakeSemanticEvaluator()).check_prompt("alpha beta")
 
     assert all_result["matched"] is True
     assert all_result["debug"]["all_semantic_matches"] == {"$one": True, "$two": True}
@@ -453,7 +453,7 @@ def test_matcher_evaluates_bare_llm_quantifiers():
             matched = prompt_template in text
             return matched, 1.0 if matched else 0.0, {"reason": "fake"}
 
-    parser = NovaParser()
+    parser = SentinelParser()
     rule = parser.parse(
         """
 rule BareLlmQuantifierRule
@@ -468,7 +468,7 @@ rule BareLlmQuantifierRule
 """
     )
 
-    result = NovaMatcher(rule, llm_evaluator=FakeLLMEvaluator()).check_prompt("alpha")
+    result = SentinelMatcher(rule, llm_evaluator=FakeLLMEvaluator()).check_prompt("alpha")
 
     assert result["matched"] is True
     assert result["debug"]["all_llm_matches"] == {"$one": True, "$two": False}
@@ -487,7 +487,7 @@ rule BareAllLlmQuantifierRule
 """
     )
 
-    all_result = NovaMatcher(all_rule, llm_evaluator=FakeLLMEvaluator()).check_prompt("alpha beta")
+    all_result = SentinelMatcher(all_rule, llm_evaluator=FakeLLMEvaluator()).check_prompt("alpha beta")
 
     assert all_result["matched"] is True
     assert all_result["debug"]["all_llm_matches"] == {"$one": True, "$two": True}
@@ -498,7 +498,7 @@ def test_matcher_does_not_short_circuit_cross_stage_all_prefix():
         def evaluate_prompt(self, pattern, text, temperature=0.1):
             return False, 0.0, {"reason": "forced non-match"}
 
-    rule = NovaParser().parse(
+    rule = SentinelParser().parse(
         """
 rule CrossStageAllRule
 {
@@ -513,7 +513,7 @@ rule CrossStageAllRule
 }
 """
     )
-    matcher = NovaMatcher(rule, llm_evaluator=RejectingLLM())
+    matcher = SentinelMatcher(rule, llm_evaluator=RejectingLLM())
 
     result = matcher.check_prompt("alpha")
 
@@ -522,7 +522,7 @@ rule CrossStageAllRule
 
 
 def test_matcher_fails_closed_when_required_llm_is_unavailable():
-    rule = NovaParser().parse(
+    rule = SentinelParser().parse(
         """
 rule NegatedLlmRule
 {
@@ -534,7 +534,7 @@ rule NegatedLlmRule
 }
 """
     )
-    matcher = NovaMatcher(rule, create_llm_evaluator=False)
+    matcher = SentinelMatcher(rule, create_llm_evaluator=False)
 
     result = matcher.check_prompt("alpha")
 
@@ -551,7 +551,7 @@ def test_matcher_fails_closed_when_semantic_evaluator_errors():
             self.last_error = "semantic model unavailable"
             return False, 0.0
 
-    rule = NovaParser().parse(
+    rule = SentinelParser().parse(
         """
 rule NegatedSemanticErrorRule
 {
@@ -563,7 +563,7 @@ rule NegatedSemanticErrorRule
 }
 """
     )
-    matcher = NovaMatcher(rule, semantic_evaluator=ErrorSemanticEvaluator())
+    matcher = SentinelMatcher(rule, semantic_evaluator=ErrorSemanticEvaluator())
 
     result = matcher.check_prompt("alpha")
 
@@ -576,7 +576,7 @@ def test_matcher_fails_closed_when_llm_evaluator_returns_error_details():
         def evaluate_prompt(self, pattern, text, temperature=0.1):
             return False, 0.0, {"error": "provider unavailable"}
 
-    rule = NovaParser().parse(
+    rule = SentinelParser().parse(
         """
 rule NegatedLlmErrorRule
 {
@@ -588,7 +588,7 @@ rule NegatedLlmErrorRule
 }
 """
     )
-    matcher = NovaMatcher(rule, llm_evaluator=ErrorLLMEvaluator())
+    matcher = SentinelMatcher(rule, llm_evaluator=ErrorLLMEvaluator())
 
     result = matcher.check_prompt("alpha")
 
@@ -602,7 +602,7 @@ def test_matcher_skip_llm_fails_closed_when_llm_can_change_outcome():
         def evaluate_prompt(self, pattern, text, temperature=0.1):
             return True, 0.9, {"reason": "safe"}
 
-    rule = NovaParser().parse(
+    rule = SentinelParser().parse(
         """
 rule SkipNegatedLlmRule
 {
@@ -614,7 +614,7 @@ rule SkipNegatedLlmRule
 }
 """
     )
-    matcher = NovaMatcher(rule, llm_evaluator=MatchingLLM())
+    matcher = SentinelMatcher(rule, llm_evaluator=MatchingLLM())
 
     skipped = matcher.check_prompt("alpha", skip_llm=True)
     full = matcher.check_prompt("alpha")
@@ -627,7 +627,7 @@ rule SkipNegatedLlmRule
 
 
 def test_matcher_can_skip_unavailable_llm_when_condition_is_already_decided():
-    rule = NovaParser().parse(
+    rule = SentinelParser().parse(
         """
 rule KeywordOrLlmRule
 {
@@ -642,7 +642,7 @@ rule KeywordOrLlmRule
 }
 """
     )
-    matcher = NovaMatcher(rule, create_llm_evaluator=False)
+    matcher = SentinelMatcher(rule, create_llm_evaluator=False)
 
     result = matcher.check_prompt("alpha")
 
